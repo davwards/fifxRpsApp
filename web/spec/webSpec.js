@@ -29,18 +29,14 @@ class PlayForm extends React.Component {
         this.setState({status: "P2 WINS!!!"})
     }
 
-    p1ThrowInputChanged(e){
-        this.setState({p1Throw: e.target.value})
-    }
-
-    p2ThrowInputChanged(e){
-        this.setState({p2Throw: e.target.value})
+    inputChanged(e){
+        this.setState({[e.target.name]: e.target.value})
     }
 
     render(){
         return <div>
-            <input type="text" name="p1Throw" onChange={this.p1ThrowInputChanged.bind(this)}/>
-            <input type="text" name="p2Throw" onChange={this.p2ThrowInputChanged.bind(this)}/>
+            <input type="text" name="p1Throw" onChange={this.inputChanged.bind(this)}/>
+            <input type="text" name="p2Throw" onChange={this.inputChanged.bind(this)}/>
 
             <button onClick={this.handleSubmit.bind(this)}>{this.state.status}</button>
             </div>
@@ -107,22 +103,21 @@ describe("play round form", function () {
 
     })
 
+    function fillIn(name, value) {
+        let input = document.querySelector(`[name='${name}']`)
+        input.value = value
+        ReactTestUtils.Simulate.change(input)
+    }
+
     it("sends the user's input to the high level policy", function () {
         let playSpy = jasmine.createSpy()
         
         requests = { play: playSpy}
         
         renderForm()
-        
-        let input
-        
-        input = document.querySelector("[name='p1Throw']")
-        input.value = "foo"
-        ReactTestUtils.Simulate.change(input)
-        
-        input = document.querySelector("[name='p2Throw']")
-        input.value = "bar"
-        ReactTestUtils.Simulate.change(input)
+
+        fillIn("p1Throw", "foo")
+        fillIn("p2Throw", "bar")
 
         submitForm()
 
