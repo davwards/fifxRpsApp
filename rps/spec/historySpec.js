@@ -12,7 +12,7 @@ describe("history", function () {
         })
     })
 
-    fdescribe("rounds have been played", function () {
+    describe("rounds have been played", function () {
         it("sends the rounds to the observer", function () {
             let playObserver = {tie(){}}
             let roundRepo = {
@@ -36,3 +36,53 @@ describe("history", function () {
     })
 
 })
+
+function FakeRoundRepo(){
+    let empty = true
+
+    this.isEmpty = function(){
+        return empty
+    }
+
+    this.save = function(){
+        empty = false
+    }
+}
+
+fdescribe("round repo", function () {
+    describe("no rounds have been saved", function () {
+        it("is empty", function () {
+            expect(new FakeRoundRepo().isEmpty()).toBe(true)
+        })
+    })
+
+    describe("when rounds have been saved", function () {
+        it("is not empty", function () {
+            let roundRepo = new FakeRoundRepo()
+
+            roundRepo.save(new Round())
+
+            expect(roundRepo.isEmpty()).toBe(false)
+        })
+
+        it("returns the rounds that have been saved", function () {
+            let roundRepo = new FakeRoundRepo()
+
+            const round1 = new Round("round1")
+            const round2 = new Round("round2")
+
+            roundRepo.save(round1)
+            roundRepo.save(round2)
+
+            expect(roundRepo.all()).toContain(round1)
+            expect(roundRepo.all()).toContain(round2)
+        })
+
+    })
+
+})
+
+
+
+
+
