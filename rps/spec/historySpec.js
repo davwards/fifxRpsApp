@@ -17,7 +17,8 @@ describe("history", function () {
             let playObserver = {tie(){}}
             let roundRepo = {
                 isEmpty(){},
-                all(){}
+                all(){},
+                save(){}
             }
             let observer = jasmine.createSpyObj("observer", ["rounds"])
 

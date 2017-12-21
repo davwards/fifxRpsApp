@@ -1,6 +1,6 @@
 function Requests(){
-    this.playRound = function(p1Throw, p2Throw, observer){
-        new PlayRoundRequest(p1Throw, p2Throw, observer).process()
+    this.playRound = function(p1Throw, p2Throw, observer, repo){
+        new PlayRoundRequest(p1Throw, p2Throw, observer, repo).process()
     }
 
     this.getHistory = function(observer, roundRepo){
@@ -17,12 +17,14 @@ function Round(p1Throw, p2Throw, result){
     this.result = result
 }
 
-function PlayRoundRequest(p1Throw, p2Throw, observer){
+function PlayRoundRequest(p1Throw, p2Throw, observer, roundRepo){
     this.process = function(){
         if (invalidThrow(p1Throw) || invalidThrow(p2Throw))
             observer.invalid()
-        else if (tie())
+        else if (tie()){
+            roundRepo.save(new Round(p1Throw, p2Throw, "tie"))
             observer.tie()
+        }
         else if (p1Wins())
             observer.p1Wins()
         else
