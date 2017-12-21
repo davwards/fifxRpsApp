@@ -10,7 +10,7 @@ class PlayForm extends React.Component {
     }
 
     handleSubmit(){
-        this.props.requests.play("p1 placeholder", "p2 throw placeholder", this)
+        this.props.requests.play(this.state.p1Throw, this.state.p2Throw, this)
     }
 
     invalid(){
@@ -33,10 +33,14 @@ class PlayForm extends React.Component {
         this.setState({p1Throw: e.target.value})
     }
 
+    p2ThrowInputChanged(e){
+        this.setState({p2Throw: e.target.value})
+    }
+
     render(){
         return <div>
             <input type="text" name="p1Throw" onChange={this.p1ThrowInputChanged.bind(this)}/>
-            <input type="text" name="p2Throw"/>
+            <input type="text" name="p2Throw" onChange={this.p2ThrowInputChanged.bind(this)}/>
 
             <button onClick={this.handleSubmit.bind(this)}>{this.state.status}</button>
             </div>
