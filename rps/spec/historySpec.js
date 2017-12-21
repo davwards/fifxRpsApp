@@ -1,6 +1,5 @@
 const {Requests, Round} = require("../src/rps")
 const FakeRoundRepo = require("./FakeRoundRepo")
-
 describe("history", function () {
     let requests
 
@@ -33,8 +32,8 @@ describe("history", function () {
             expect(observer.rounds).toHaveBeenCalledWith(
                 [
                     new Round("rock", "rock", "tie"),
-                    new Round("rock", "paper", "p2"),
-                    new Round("paper", "rock", "p1"),
+                    new Round("rock", "paper", "p2Wins"),
+                    new Round("paper", "rock", "p1Wins"),
                     new Round("rock", "sailboat", "invalid"),
                 ]
             )

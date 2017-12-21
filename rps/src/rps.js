@@ -19,22 +19,19 @@ function Round(p1Throw, p2Throw, result){
 
 function PlayRoundRequest(p1Throw, p2Throw, observer, roundRepo){
     this.process = function(){
-        if (invalidThrow(p1Throw) || invalidThrow(p2Throw)){
-            roundRepo.save(new Round(p1Throw, p2Throw, "invalid"))
-            observer.invalid()
-        }
-        else if (tie()){
-            roundRepo.save(new Round(p1Throw, p2Throw, "tie"))
-            observer.tie()
-        }
-        else if (p1Wins()) {
-            roundRepo.save(new Round(p1Throw, p2Throw, "p1"))
-            observer.p1Wins()
-        }
-        else{
-            roundRepo.save(new Round(p1Throw, p2Throw, "p2"))
-            observer.p2Wins()
-        }
+        if (invalidThrow(p1Throw) || invalidThrow(p2Throw))
+            processAs("invalid")
+        else if (tie())
+            processAs("tie")
+        else if (p1Wins())
+            processAs("p1Wins")
+        else
+            processAs("p2Wins")
+    }
+
+    function processAs(result) {
+        roundRepo.save(new Round(p1Throw, p2Throw, result))
+        observer[result]()
     }
 
     function tie() {
