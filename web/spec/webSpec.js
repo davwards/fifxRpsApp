@@ -9,7 +9,15 @@ class PlayForm extends React.Component {
     }
 
     handleSubmit(){
+        this.props.requests.play("p1 placeholder", "p2 throw placeholder", this)
+    }
+
+    invalid(){
         this.setState({status: "INVALID"})
+    }
+
+    tie(){
+        this.setState({status: "TIE"})
     }
 
     render(){
@@ -33,6 +41,20 @@ describe("play round form", function () {
 
     })
 
+    describe("playRound requests processes as tie", function () {
+        beforeEach(function () {
+            requests = { play(p1, p2, observer){ observer.tie() }}
+        })
+
+        it("display TIE to the user", function () {
+            renderForm()
+
+            expect(page()).not.toContain("TIE")
+            submitForm()
+            expect(page()).toContain("TIE")
+        })
+
+    })
     let domFixture, requests
 
     function setupDom() {
@@ -58,4 +80,8 @@ describe("play round form", function () {
     function submitForm() {
         document.querySelector("button").click()
     }
+
+    afterEach(function () {
+        domFixture.remove()
+    })
 })
