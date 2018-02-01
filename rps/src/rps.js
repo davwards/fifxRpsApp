@@ -1,37 +1,28 @@
-function Requests(roundRepo){
-    this.playRound = function(p1Throw, p2Throw, observer){
+function Requests(){
+    this.playRound = function(p1Throw, p2Throw, observer, roundRepo){
         new PlayRoundRequest(p1Throw, p2Throw, observer, roundRepo).process()
     }
 
-    this.getHistory = function(observer){
-        if (roundRepo.isEmpty())
-            observer.noRounds()
+    this.history = function(ui, roundRepo) {
+        if(roundRepo.findAll().length === 0)
+            ui.noRounds();
         else
-            observer.rounds(roundRepo.all())
+            ui.rounds();
     }
-}
-
-function Round(p1Throw, p2Throw, result){
-    this.p1Throw = p1Throw
-    this.p2Throw = p2Throw
-    this.result = result
 }
 
 function PlayRoundRequest(p1Throw, p2Throw, observer, roundRepo){
     this.process = function(){
         if (invalidThrow(p1Throw) || invalidThrow(p2Throw))
-            processAs("invalid")
+            observer.invalid()
         else if (tie())
-            processAs("tie")
+            observer.tie()
         else if (p1Wins())
-            processAs("p1Wins")
+            observer.p1Wins()
         else
-            processAs("p2Wins")
-    }
+            observer.p2Wins()
 
-    function processAs(result) {
-        roundRepo.save(new Round(p1Throw, p2Throw, result))
-        observer[result]()
+        roundRepo.save({})
     }
 
     function tie() {
@@ -59,6 +50,5 @@ function PlayRoundRequest(p1Throw, p2Throw, observer, roundRepo){
 }
 
 module.exports = {
-    Requests,
-    Round,
+    Requests
 }
